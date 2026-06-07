@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ส่งงานคลิปวิชาวิทยาการคำนวณ ป.4/1</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="top-banner">
+      <div class="banner-strip"></div>
+      <div class="headline">
+        <div class="brand-row">
+          <img class="school-logo" src="./assets/logo.jpg" alt="ตราโรงเรียนอนุบาลหนองหานวิทยายน" />
+          <div class="lesson-title">ตัวอย่างอัลกอริทึมในชีวิตประจำวัน</div>
+        </div>
+        <div class="class-title">
+          <span class="subject-word">การต้มไข่</span>
+          <span>ส่งงานคลิปวิชาวิทยาการคำนวณ ป.4/1</span>
+        </div>
+        <address class="teacher-profile" aria-label="ข้อมูลผู้สอน">
+          <div class="teacher-profile-main">
+            <span class="teacher-profile-label">ผู้จัดทำ</span>
+            <a href="https://pichayanon89.github.io/e-portfolio/" target="_blank" rel="noreferrer">นายพิชญานนท์ วัจนสุนทร</a>
+          </div>
+          <div class="teacher-profile-details">
+            <span>ครู วิทยฐานะชำนาญการ</span>
+            <span>โรงเรียนอนุบาลหนองหานวิทยายน</span>
+            <span>สังกัด สพป.อุดรธานี เขต 3</span>
+          </div>
+        </address>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <section class="student-panel" aria-labelledby="student-heading">
+        <div class="panel-heading blue">
+          <span class="icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+          <h1 id="student-heading">นักเรียนส่งงาน</h1>
+        </div>
+
+        <div class="assignment-card">
+          <div class="video-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="m10 8 6 4-6 4V8Z"/><path d="M4 6h16v12H4z"/><path d="m8 4 2 2"/><path d="m14 4 2 2"/></svg>
+          </div>
+          <div>
+            <h2>หัวข้องาน: ขั้นตอนการต้มไข่</h2>
+            <p>
+              ให้นักเรียนจัดทำคลิปวิดีโอแสดงขั้นตอนการต้มไข่อย่างเป็นลำดับ
+              พร้อมอธิบายเหตุผลในแต่ละขั้นตอน จากนั้นส่งลิงก์คลิปจากช่องทางที่สะดวก
+            </p>
+          </div>
+        </div>
+
+        <form id="submissionForm" class="submission-form">
+          <label>
+            เลขที่ <span>*</span>
+            <input id="studentNo" name="studentNo" inputmode="numeric" autocomplete="off" placeholder="เช่น 1" required />
+          </label>
+
+          <label>
+            ชื่อ-สกุล <span>*</span>
+            <input id="studentName" name="studentName" autocomplete="name" placeholder="เช่น เด็กชายคิดดี ใจดี" required />
+          </label>
+
+          <section class="upload-mode" aria-label="วิธีส่งคลิป">
+            <div class="upload-tabs">
+              <button id="directUploadTab" class="mode-button active" type="button">อัปโหลดคลิปโดยตรง</button>
+              <button id="linkUploadTab" class="mode-button" type="button">วางลิงก์จากที่อื่น</button>
+            </div>
+
+            <div id="directUploadArea">
+              <label class="file-drop">
+                เลือกไฟล์วิดีโอ <span>*</span>
+                <input id="videoFile" name="videoFile" type="file" accept="video/*" required />
+                <small>รองรับไฟล์วิดีโอจากมือถือ เช่น MP4, MOV ระบบจะอัปโหลดลง Google Drive ของครู</small>
+              </label>
+
+              <details class="apps-script-config">
+                <summary>ตั้งค่า URL ระบบอัปโหลดของครู</summary>
+                <label>
+                  Google Apps Script Web App URL
+                  <input id="uploadEndpoint" type="url" placeholder="วาง URL ที่ได้จาก Deploy Web App" />
+                </label>
+                <small>ตั้งค่าไว้แล้ว เปลี่ยนเฉพาะเมื่อมีการ Deploy Apps Script ใหม่</small>
+              </details>
+            </div>
+
+            <div id="linkUploadArea" hidden>
+              <label>
+                ลิงก์คลิป <span>*</span>
+                <div class="input-with-icon">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.7 3h6.6L22 15l-3.3 6H5.3L2 15 8.7 3Z"/><path d="M8.7 3 12 9l-6.7 12"/><path d="M15.3 3 8.7 15H22"/></svg>
+                  <input id="driveLink" name="driveLink" type="url" placeholder="วางลิงก์คลิป เช่น Drive, YouTube, Facebook หรือช่องทางอื่น" />
+                </div>
+                <small>ส่งลิงก์จากช่องทางใดก็ได้ แต่ต้องตั้งค่าให้ครูเปิดดูได้</small>
+              </label>
+            </div>
+          </section>
+
+          <label>
+            หมายเหตุ (ถ้ามี)
+            <textarea id="note" name="note" rows="3" placeholder="เช่น อธิบายเพิ่มเติม หรือปัญหาที่พบในการทำงาน"></textarea>
+          </label>
+
+          <fieldset class="checklist">
+            <legend>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              เช็กลิสต์ก่อนส่งงาน
+            </legend>
+            <label><input type="checkbox" required /> คลิปวิดีโอแสดงขั้นตอนการต้มไข่ครบถ้วน ชัดเจน</label>
+            <label><input type="checkbox" required /> อธิบายเหตุผลในแต่ละขั้นตอน</label>
+            <label><input type="checkbox" required /> อัปโหลดหรือเผยแพร่คลิปเรียบร้อยแล้ว</label>
+            <label><input type="checkbox" required /> ตั้งค่าการแชร์ให้ครูสามารถเปิดดูได้</label>
+            <label><input type="checkbox" required /> ตรวจสอบลิงก์แล้วว่าสามารถเปิดได้</label>
+          </fieldset>
+
+          <button class="primary-button" type="submit">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+            ส่งงาน
+          </button>
+
+          <p class="privacy-note">หากไม่สะดวกเผยแพร่คลิปแบบสาธารณะ ให้แจ้งครูเพื่อขอส่งงานในรูปแบบอื่นครับ</p>
+        </form>
+
+        <section class="public-submitted-list" aria-labelledby="public-submitted-heading">
+          <div class="public-list-heading">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/><path d="M21 12a9 9 0 1 1-3-6.7"/></svg>
+            <h2 id="public-submitted-heading">รายชื่อผู้ส่งงานแล้ว</h2>
+          </div>
+          <div id="publicSubmittedList" class="public-list"></div>
+        </section>
+      </section>
+
+      <section class="teacher-panel" aria-labelledby="teacher-heading">
+        <div class="panel-heading green">
+          <span class="icon-box" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14v3"/><path d="M12 9v8"/><path d="M17 5v12"/></svg>
+          </span>
+          <h2 id="teacher-heading">แดชบอร์ดครู ติดตามการส่งงานและนำเสนอ</h2>
+        </div>
+
+        <div id="teacherLogin" class="teacher-login">
+          <div class="teacher-login-card">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+            <h3>เข้าสู่แดชบอร์ดครู</h3>
+            <p>กรอกรหัสผ่านเพื่อดูภาพรวมการส่งงานและเปิดคลิปนำเสนอ</p>
+            <form id="teacherLoginForm">
+              <label>
+                รหัสผ่าน
+                <input id="teacherPassword" type="password" autocomplete="current-password" placeholder="กรอกรหัสผ่าน" required />
+              </label>
+              <button class="present-button" type="submit">เข้าสู่ระบบ</button>
+            </form>
+            <small id="teacherLoginError" class="login-error" aria-live="polite"></small>
+          </div>
+        </div>
+
+        <div id="teacherDashboard" hidden>
+          <div class="teacher-tools">
+            <label class="search-box">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input id="searchInput" type="search" placeholder="ค้นหาเลขที่ หรือชื่อ-สกุล" />
+            </label>
+            <select id="statusFilter" aria-label="กรองสถานะ">
+              <option value="all">สถานะทั้งหมด</option>
+              <option value="submitted">ส่งแล้ว</option>
+              <option value="pending">ยังไม่ส่ง</option>
+              <option value="presented">นำเสนอแล้ว</option>
+            </select>
+            <button id="refreshButton" class="secondary-button" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.4 6.4L3 16"/><path d="M3 21v-5h5"/><path d="M3 12A9 9 0 0 1 18.4 5.6L21 8"/><path d="M21 3v5h-5"/></svg>
+              รีเฟรช
+            </button>
+            <button id="exportButton" class="secondary-button" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+              ส่งออก CSV
+            </button>
+            <button id="lockDashboardButton" class="secondary-button" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+              ล็อก
+            </button>
+          </div>
+
+          <div class="summary-grid" aria-label="ภาพรวมการส่งงาน">
+            <article>
+              <span>ทั้งหมด</span>
+              <strong id="totalCount">0</strong>
+              <small>คน</small>
+            </article>
+            <article class="success">
+              <span>ส่งแล้ว</span>
+              <strong id="submittedCount">0</strong>
+              <small>คน</small>
+            </article>
+            <article class="warning">
+              <span>ยังไม่ส่ง</span>
+              <strong id="pendingCount">0</strong>
+              <small>คน</small>
+            </article>
+            <article class="info">
+              <span>นำเสนอแล้ว</span>
+              <strong id="presentedCount">0</strong>
+              <small>คน</small>
+            </article>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>เลขที่</th>
+                  <th>ชื่อ-สกุล</th>
+                  <th>สถานะ</th>
+                  <th>วันที่ส่ง</th>
+                  <th>ลิงก์</th>
+                  <th>จัดการ</th>
+                </tr>
+              </thead>
+              <tbody id="submissionsTable"></tbody>
+            </table>
+          </div>
+
+          <section class="preview-panel" aria-labelledby="preview-heading">
+            <div class="preview-media" id="previewMedia">
+              <div class="placeholder-video">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 8 6 4-6 4V8Z"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>
+                <p>เลือกนักเรียนในตารางเพื่อเปิดคลิปนำเสนอในห้อง</p>
+              </div>
+            </div>
+            <div class="preview-detail">
+              <h3 id="preview-heading">แสดงตัวอย่างวิดีโอสำหรับนำเสนอในชั้นเรียน</h3>
+              <dl>
+                <div><dt>เลขที่</dt><dd id="previewNo">-</dd></div>
+                <div><dt>ชื่อ</dt><dd id="previewName">-</dd></div>
+                <div><dt>วันที่ส่ง</dt><dd id="previewDate">-</dd></div>
+                <div><dt>สถานะ</dt><dd id="previewStatus"><span class="status-chip muted">ยังไม่ได้เลือก</span></dd></div>
+              </dl>
+              <p id="previewNote" class="preview-note">หมายเหตุจะแสดงตรงนี้เมื่อเลือกงานของนักเรียน</p>
+              <div class="preview-actions">
+                <a id="openDriveButton" class="outline-button disabled" href="#" target="_blank" rel="noreferrer">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.7 3h6.6L22 15l-3.3 6H5.3L2 15 8.7 3Z"/></svg>
+                  เปิดลิงก์คลิป
+                </a>
+                <button id="presentButton" class="present-button" type="button" disabled>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                  ทำเครื่องหมายว่า “นำเสนอแล้ว”
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <template id="statusTemplate">
+      <span class="status-chip"></span>
+    </template>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
