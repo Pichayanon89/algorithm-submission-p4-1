@@ -1,20 +1,11 @@
 const DRIVE_FOLDER_ID = "1gksEfcJGqgyHpC4zYco_ySL25vX7COIS";
 const DEFAULT_UPLOAD_ENDPOINT = "https://script.google.com/macros/s/AKfycbzCJb7ZIyPJXsJ4YK8Fzp_TjxdeLPnSwSTzocdsyFpc_yIEzNsOn2gd-1zHckfW7tDw/exec";
 const TEACHER_PASSWORD = "mep412569";
-const STORAGE_KEY = "p4_1_algorithm_submissions";
+const STORAGE_KEY = "p4_1_algorithm_submissions_clean_v2";
 const ENDPOINT_KEY = "p4_1_drive_upload_endpoint";
 const TEACHER_AUTH_KEY = "p4_1_teacher_dashboard_unlocked";
 
-const initialStudents = [
-  { no: 1, name: "เด็กชายคิดดี ใจดี", status: "submitted", submittedAt: "24 พ.ค. 2567 09:15", link: "https://drive.google.com/file/d/example1/view?usp=sharing", note: "คลิปอธิบายครบตามลำดับ" },
-  { no: 2, name: "เด็กหญิงพิมพ์นภา รักเรียน", status: "submitted", submittedAt: "24 พ.ค. 2567 09:22", link: "https://drive.google.com/file/d/example2/view?usp=sharing", note: "" },
-  { no: 3, name: "เด็กชายธันวัฒน์ ตั้งใจ", status: "pending", submittedAt: "-", link: "", note: "" },
-  { no: 4, name: "เด็กหญิงวริศรา แก้วใส", status: "submitted", submittedAt: "24 พ.ค. 2567 10:03", link: "https://drive.google.com/file/d/example4/view?usp=sharing", note: "ถ่ายคลิปกับผู้ปกครอง" },
-  { no: 5, name: "เด็กชายภัทรพล ดีมาก", status: "presented", submittedAt: "24 พ.ค. 2567 10:20", link: "https://drive.google.com/file/d/example5/view?usp=sharing", note: "นำเสนอแล้ว" },
-  { no: 6, name: "เด็กหญิงณัฐธิดา ใฝ่รู้", status: "submitted", submittedAt: "24 พ.ค. 2567 10:45", link: "https://drive.google.com/file/d/example6/view?usp=sharing", note: "" },
-  { no: 7, name: "เด็กชายปกรณ์เกียรติ ขยัน", status: "pending", submittedAt: "-", link: "", note: "" },
-  { no: 8, name: "เด็กหญิงกัญญาภัทร ยิ้มเก่ง", status: "submitted", submittedAt: "24 พ.ค. 2567 11:11", link: "https://drive.google.com/file/d/example8/view?usp=sharing", note: "" },
-];
+const initialStudents = [];
 
 let submissions = loadSubmissions();
 let selectedNo = submissions.find((item) => item.link)?.no ?? null;

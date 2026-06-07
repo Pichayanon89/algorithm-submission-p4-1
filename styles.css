@@ -965,3 +965,280 @@ dd {
     grid-template-columns: 1fr;
   }
 }
+
+/* Visual refresh for production */
+body {
+  background:
+    linear-gradient(180deg, #fff6ef 0 156px, #f5fbff 156px 100%);
+}
+
+.top-banner {
+  padding-top: 28px;
+  border-bottom: 0;
+}
+
+.banner-strip {
+  height: 148px;
+  background:
+    linear-gradient(90deg, rgba(21, 90, 147, 0.1), rgba(12, 170, 131, 0.1)),
+    #f1ad7b;
+  border-bottom: 4px solid #0caa83;
+}
+
+.headline {
+  max-width: 1240px;
+  padding-bottom: 24px;
+}
+
+.brand-row {
+  align-items: stretch;
+  gap: 14px;
+}
+
+.school-logo {
+  width: 108px;
+  height: 108px;
+  align-self: center;
+  border: 4px solid #ffffff;
+  outline: 3px solid #0caa83;
+  box-shadow: 0 16px 30px rgba(21, 90, 147, 0.18);
+}
+
+.lesson-title {
+  flex: 1;
+  max-width: none;
+  min-height: 104px;
+  justify-content: center;
+  border: 3px solid #0caa83;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.04)),
+    #155a93;
+  font-size: clamp(34px, 3.7vw, 48px);
+  text-align: center;
+}
+
+.class-title {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px;
+  align-items: end;
+  margin-top: 18px;
+}
+
+.class-title > span:last-child {
+  padding-bottom: 4px;
+  color: #155a93;
+}
+
+.teacher-profile {
+  grid-template-columns: 1fr;
+  max-width: none;
+  padding: 14px 18px;
+  border: 1px solid #bdd8f1;
+  border-left: 6px solid #e90b82;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 10px 24px rgba(21, 90, 147, 0.1);
+}
+
+.teacher-profile-main {
+  justify-content: space-between;
+}
+
+.teacher-profile-label {
+  background: #e90b82;
+}
+
+.teacher-profile-details {
+  color: #475467;
+}
+
+.app-shell {
+  grid-template-columns: minmax(390px, 0.92fr) minmax(640px, 1.08fr);
+  gap: 22px;
+  max-width: 1500px;
+  padding: 22px;
+}
+
+.student-panel,
+.teacher-panel {
+  border: 1px solid #cbdff2;
+  box-shadow: 0 18px 42px rgba(16, 35, 63, 0.12);
+}
+
+.panel-heading {
+  padding: 14px 20px;
+}
+
+.panel-heading.blue {
+  background: linear-gradient(90deg, #155a93, #0969d8);
+}
+
+.panel-heading.green {
+  background: linear-gradient(90deg, #08783d, #10a85a);
+}
+
+.assignment-card {
+  border-color: #bdd8f1;
+  background:
+    linear-gradient(135deg, rgba(234, 244, 255, 0.95), rgba(255, 255, 255, 0.95));
+}
+
+.assignment-card h2 {
+  color: #155a93;
+  font-size: 23px;
+}
+
+.submission-form {
+  gap: 16px;
+}
+
+input,
+textarea,
+select,
+.input-with-icon,
+.search-box {
+  border-color: #bfd0e4;
+  background: #fbfdff;
+}
+
+.upload-mode {
+  border-color: #bdd8f1;
+  background: #f5fbff;
+}
+
+.mode-button {
+  color: #155a93;
+}
+
+.mode-button.active {
+  background: #155a93;
+  border-color: #155a93;
+}
+
+.file-drop {
+  border-color: #8ab6e8;
+  background:
+    linear-gradient(180deg, #ffffff, #f7fbff);
+}
+
+.checklist {
+  border-color: #f0cf8b;
+  background: linear-gradient(180deg, #fffaf0, #fff7df);
+}
+
+.primary-button {
+  background: linear-gradient(90deg, #0969d8, #155a93);
+  box-shadow: 0 10px 20px rgba(9, 105, 216, 0.2);
+}
+
+.public-submitted-list {
+  border-color: #bdd8f1;
+  box-shadow: 0 10px 24px rgba(21, 90, 147, 0.08);
+}
+
+.public-list-heading {
+  background: linear-gradient(90deg, #f7fbff, #ffffff);
+}
+
+.public-submitted-item {
+  border-color: #dce8f5;
+  background: #fbfdff;
+}
+
+.public-empty {
+  padding: 18px 10px;
+  border: 1px dashed #bdd8f1;
+  border-radius: var(--radius);
+  background: #f7fbff;
+}
+
+.teacher-login {
+  min-height: 520px;
+  background:
+    linear-gradient(135deg, rgba(234, 248, 239, 0.95), rgba(234, 244, 255, 0.95));
+}
+
+.teacher-login-card {
+  border-color: #bfe6cd;
+  box-shadow: 0 20px 44px rgba(8, 120, 61, 0.14);
+}
+
+.teacher-tools {
+  grid-template-columns: minmax(240px, 1fr) 170px auto auto auto;
+}
+
+.summary-grid article {
+  background: #fbfdff;
+}
+
+.table-wrap {
+  border-color: #cbdff2;
+}
+
+thead {
+  background: #08783d;
+}
+
+.preview-panel {
+  border-color: #bdd8f1;
+  background: #fbfdff;
+}
+
+.placeholder-video {
+  background:
+    linear-gradient(135deg, rgba(21, 90, 147, 0.25), rgba(8, 120, 61, 0.16)),
+    #101828;
+}
+
+@media (max-width: 1120px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-tools {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  body {
+    background:
+      linear-gradient(180deg, #fff6ef 0 120px, #f5fbff 120px 100%);
+  }
+
+  .top-banner {
+    padding-top: 16px;
+  }
+
+  .banner-strip {
+    height: 110px;
+  }
+
+  .brand-row {
+    align-items: center;
+  }
+
+  .school-logo {
+    width: 70px;
+    height: 70px;
+  }
+
+  .lesson-title {
+    min-height: 74px;
+    font-size: 25px;
+    text-align: left;
+  }
+
+  .class-title {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-profile-main {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .app-shell {
+    padding: 12px;
+  }
+}
