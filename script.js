@@ -1,28 +1,18 @@
-const DRIVE_FOLDER_ID = "1gksEfcJGqgyHpC4zYco_ySL25vX7COIS";
-const DEFAULT_UPLOAD_ENDPOINT = "https://script.google.com/macros/s/AKfycbzCJb7ZIyPJXsJ4YK8Fzp_TjxdeLPnSwSTzocdsyFpc_yIEzNsOn2gd-1zHckfW7tDw/exec";
+const API_ENDPOINT = "https://script.google.com/macros/s/AKfycbzCJb7ZIyPJXsJ4YK8Fzp_TjxdeLPnSwSTzocdsyFpc_yIEzNsOn2gd-1zHckfW7tDw/exec";
 const TEACHER_PASSWORD = "mep412569";
 const STORAGE_KEY = "p4_1_algorithm_submissions_clean_v2";
-const ENDPOINT_KEY = "p4_1_drive_upload_endpoint";
 const TEACHER_AUTH_KEY = "p4_1_teacher_dashboard_unlocked";
 
 const initialStudents = [];
 
 let submissions = loadSubmissions();
 let selectedNo = submissions.find((item) => item.link)?.no ?? null;
-let uploadMode = "direct";
 
 const form = document.querySelector("#submissionForm");
 const studentNo = document.querySelector("#studentNo");
 const studentName = document.querySelector("#studentName");
 const driveLink = document.querySelector("#driveLink");
 const note = document.querySelector("#note");
-const videoFile = document.querySelector("#videoFile");
-const selectedFileName = document.querySelector("#selectedFileName");
-const uploadEndpoint = document.querySelector("#uploadEndpoint");
-const directUploadTab = document.querySelector("#directUploadTab");
-const linkUploadTab = document.querySelector("#linkUploadTab");
-const directUploadArea = document.querySelector("#directUploadArea");
-const linkUploadArea = document.querySelector("#linkUploadArea");
 const searchInput = document.querySelector("#searchInput");
 const statusFilter = document.querySelector("#statusFilter");
 const tableBody = document.querySelector("#submissionsTable");
@@ -39,24 +29,15 @@ const teacherPassword = document.querySelector("#teacherPassword");
 const teacherLoginError = document.querySelector("#teacherLoginError");
 const lockDashboardButton = document.querySelector("#lockDashboardButton");
 
-uploadEndpoint.value = localStorage.getItem(ENDPOINT_KEY) || DEFAULT_UPLOAD_ENDPOINT;
-
-directUploadTab.addEventListener("click", () => {
-  const wasDirect = uploadMode === "direct";
-  setUploadMode("direct");
-  if (wasDirect) {
-    videoFile.click();
-  }
-});
-linkUploadTab.addEventListener("click", () => setUploadMode("link"));
 searchInput.addEventListener("input", render);
 statusFilter.addEventListener("change", render);
-refreshButton.addEventListener("click", render);
-exportButton.addEventListener("click", exportCsv);
-uploadEndpoint.addEventListener("change", () => localStorage.setItem(ENDPOINT_KEY, uploadEndpoint.value.trim()));
-videoFile.addEventListener("change", () => {
-  selectedFileName.textContent = videoFile.files[0]?.name || "ยังไม่ได้เลือกไฟล์";
+refreshButton.addEventListener("click", () => {
+  refreshButton.disabled = true;
+  loadRemoteSubmissions().finally(() => {
+    refreshButton.disabled = false;
+  });
 });
+exportButton.addEventListener("click", exportCsv);
 teacherLoginForm.addEventListener("submit", handleTeacherLogin);
 lockDashboardButton.addEventListener("click", lockTeacherDashboard);
 
@@ -64,7 +45,7 @@ form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const button = form.querySelector(".primary-button");
   button.disabled = true;
-  button.textContent = uploadMode === "direct" ? "กำลังอัปโหลด..." : "กำลังส่งงาน...";
+  button.textContent = "กำลังส่งงาน...";
 
   try {
     const no = Number.parseInt(studentNo.value.trim(), 10);
@@ -72,25 +53,36 @@ form.addEventListener("submit", async (event) => {
       throw new Error("กรุณากรอกเลขที่เป็นตัวเลข");
     }
 
-    let finalLink = driveLink.value.trim();
-    if (uploadMode === "direct") {
-      finalLink = await uploadVideoFile(no, studentName.value.trim());
+    const finalLink = driveLink.value.trim();
+
+    const result = await postToAppsScript({
+      action: "submit",
+      studentNo: no,
+      studentName: studentName.value.trim(),
+      link: finalLink,
+      note: note.value.trim(),
+    });
+
+    if (!result.ok) {
+      throw new Error(result.error || "ส่งงานไม่สำเร็จ กรุณาลองใหม่");
     }
 
-    upsertSubmission({
+    if (Array.isArray(result.submissions)) {
+      submissions = normalizeSubmissions(result.submissions);
+      saveSubmissions();
+    } else {
+      upsertSubmission({
       no,
       name: studentName.value.trim(),
       status: "submitted",
       submittedAt: formatThaiDate(new Date()),
       link: finalLink,
       note: note.value.trim(),
-    });
+      });
+    }
 
     selectedNo = no;
     form.reset();
-    selectedFileName.textContent = "ยังไม่ได้เลือกไฟล์";
-    uploadEndpoint.value = localStorage.getItem(ENDPOINT_KEY) || DEFAULT_UPLOAD_ENDPOINT;
-    setUploadMode(uploadMode);
     render();
     alert("ส่งงานเรียบร้อยแล้วครับ");
   } catch (error) {
@@ -101,108 +93,36 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
-presentButton.addEventListener("click", () => {
+presentButton.addEventListener("click", async () => {
   const item = submissions.find((entry) => entry.no === selectedNo);
   if (!item || !item.link) return;
-  item.status = "presented";
-  item.presentedAt = formatThaiDate(new Date());
-  saveSubmissions();
-  render();
+
+  presentButton.disabled = true;
+  try {
+    const result = await postToAppsScript({
+      action: "presented",
+      studentNo: selectedNo,
+    });
+
+    if (!result.ok) {
+      throw new Error(result.error || "อัปเดตสถานะไม่สำเร็จ");
+    }
+
+    if (Array.isArray(result.submissions)) {
+      submissions = normalizeSubmissions(result.submissions);
+      saveSubmissions();
+    } else {
+      item.status = "presented";
+      item.presentedAt = formatThaiDate(new Date());
+      saveSubmissions();
+    }
+    render();
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    presentButton.disabled = submissions.find((entry) => entry.no === selectedNo)?.status === "presented";
+  }
 });
-
-function setUploadMode(mode) {
-  uploadMode = mode;
-  const direct = mode === "direct";
-  directUploadArea.hidden = !direct;
-  linkUploadArea.hidden = direct;
-  directUploadTab.classList.toggle("active", direct);
-  linkUploadTab.classList.toggle("active", !direct);
-  videoFile.required = direct;
-  driveLink.required = !direct;
-}
-
-async function uploadVideoFile(no, name) {
-  const endpoint = uploadEndpoint.value.trim() || DEFAULT_UPLOAD_ENDPOINT;
-  const file = videoFile.files[0];
-  if (!endpoint) {
-    throw new Error("กรุณาใส่ Google Apps Script Web App URL ก่อนอัปโหลดโดยตรง");
-  }
-  if (!file) {
-    throw new Error("กรุณาเลือกไฟล์วิดีโอก่อนส่งงาน");
-  }
-  if (file.size > 45 * 1024 * 1024) {
-    throw new Error("ไฟล์ใหญ่เกิน 45 MB สำหรับ Apps Script กรุณาอัปโหลดผ่านช่องทางอื่น แล้วใช้โหมดวางลิงก์จากที่อื่น");
-  }
-
-  localStorage.setItem(ENDPOINT_KEY, endpoint);
-  const base64 = await fileToBase64(file);
-  const payload = {
-    folderId: DRIVE_FOLDER_ID,
-    studentNo: no,
-    studentName: name,
-    filename: file.name,
-    mimeType: file.type || "video/mp4",
-    data: base64,
-  };
-
-  const result = await postToAppsScript(endpoint, payload);
-  if (!result.ok) {
-    throw new Error(result.error || "อัปโหลดไฟล์ไม่สำเร็จ");
-  }
-  return result.url;
-}
-
-function postToAppsScript(endpoint, payload) {
-  return new Promise((resolve, reject) => {
-    const frameName = `uploadFrame_${Date.now()}`;
-    const iframe = document.createElement("iframe");
-    iframe.name = frameName;
-    iframe.style.display = "none";
-
-    const formElement = document.createElement("form");
-    formElement.method = "POST";
-    formElement.action = endpoint;
-    formElement.target = frameName;
-    formElement.style.display = "none";
-
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = "payload";
-    input.value = JSON.stringify(payload);
-    formElement.append(input);
-
-    const timeout = window.setTimeout(() => {
-      cleanup();
-      reject(new Error("อัปโหลดใช้เวลานานเกินไป กรุณาลองใหม่หรือใช้โหมดวางลิงก์จากที่อื่น"));
-    }, 120000);
-
-    function cleanup() {
-      window.clearTimeout(timeout);
-      window.removeEventListener("message", onMessage);
-      iframe.remove();
-      formElement.remove();
-    }
-
-    function onMessage(event) {
-      if (!event.data || event.data.type !== "p4-1-upload-result") return;
-      cleanup();
-      resolve(event.data.result);
-    }
-
-    window.addEventListener("message", onMessage);
-    document.body.append(iframe, formElement);
-    formElement.submit();
-  });
-}
-
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result).split(",")[1]);
-    reader.onerror = () => reject(new Error("อ่านไฟล์วิดีโอไม่สำเร็จ"));
-    reader.readAsDataURL(file);
-  });
-}
 
 function upsertSubmission(entry) {
   const index = submissions.findIndex((item) => item.no === entry.no);
@@ -220,6 +140,95 @@ function render() {
   renderSummary();
   renderTable();
   renderPreview();
+}
+
+function loadRemoteSubmissions() {
+  return new Promise((resolve) => {
+    const callbackName = `p41Submissions_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+    const script = document.createElement("script");
+    const cleanup = () => {
+      delete window[callbackName];
+      script.remove();
+    };
+
+    window[callbackName] = (result) => {
+      cleanup();
+      if (result?.ok && Array.isArray(result.submissions)) {
+        submissions = normalizeSubmissions(result.submissions);
+        selectedNo = submissions.find((item) => item.no === selectedNo)?.no ?? submissions.find((item) => item.link)?.no ?? null;
+        saveSubmissions();
+      }
+      render();
+      resolve(result);
+    };
+
+    script.onerror = () => {
+      cleanup();
+      render();
+      resolve({ ok: false, error: "ไม่สามารถโหลดข้อมูลจาก Google Sheet ได้" });
+    };
+
+    script.src = `${API_ENDPOINT}?action=list&callback=${encodeURIComponent(callbackName)}&ts=${Date.now()}`;
+    document.body.append(script);
+  });
+}
+
+function postToAppsScript(payload) {
+  return new Promise((resolve, reject) => {
+    const iframeName = `apps_script_frame_${Date.now()}`;
+    const iframe = document.createElement("iframe");
+    iframe.name = iframeName;
+    iframe.hidden = true;
+
+    const formElement = document.createElement("form");
+    formElement.method = "POST";
+    formElement.action = API_ENDPOINT;
+    formElement.target = iframeName;
+    formElement.hidden = true;
+
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "payload";
+    input.value = JSON.stringify(payload);
+    formElement.append(input);
+
+    const timeout = window.setTimeout(() => {
+      cleanup();
+      reject(new Error("ระบบบันทึกข้อมูลใช้เวลานานเกินไป กรุณาลองใหม่"));
+    }, 30000);
+
+    const onMessage = (event) => {
+      if (event.data?.type !== "p4-1-api-result") return;
+      cleanup();
+      resolve(event.data.result || { ok: false, error: "ไม่พบผลลัพธ์จากระบบ" });
+    };
+
+    const cleanup = () => {
+      window.clearTimeout(timeout);
+      window.removeEventListener("message", onMessage);
+      iframe.remove();
+      formElement.remove();
+    };
+
+    window.addEventListener("message", onMessage);
+    document.body.append(iframe, formElement);
+    formElement.submit();
+  });
+}
+
+function normalizeSubmissions(rows) {
+  return rows
+    .map((item) => ({
+      no: Number.parseInt(item.no ?? item.studentNo, 10),
+      name: String(item.name ?? item.studentName ?? "").trim(),
+      status: item.status || "submitted",
+      submittedAt: item.submittedAt || "",
+      link: item.link || "",
+      note: item.note || "",
+      presentedAt: item.presentedAt || "",
+    }))
+    .filter((item) => Number.isFinite(item.no) && item.name)
+    .sort((a, b) => a.no - b.no);
 }
 
 function renderPublicSubmittedList() {
@@ -387,7 +396,7 @@ function statusText(status) {
 
 function loadSubmissions() {
   const saved = localStorage.getItem(STORAGE_KEY);
-  return saved ? JSON.parse(saved) : initialStudents;
+  return saved ? normalizeSubmissions(JSON.parse(saved)) : initialStudents;
 }
 
 function saveSubmissions() {
@@ -403,6 +412,6 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-setUploadMode("direct");
 setTeacherDashboardAccess(sessionStorage.getItem(TEACHER_AUTH_KEY) === "true");
 render();
+loadRemoteSubmissions();

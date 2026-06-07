@@ -65,40 +65,15 @@
             <input id="studentName" name="studentName" autocomplete="name" placeholder="เช่น เด็กชายคิดดี ใจดี" required />
           </label>
 
-          <section class="upload-mode" aria-label="วิธีส่งคลิป">
-            <div class="upload-tabs">
-              <button id="directUploadTab" class="mode-button active" type="button">อัปโหลดคลิปโดยตรง</button>
-              <button id="linkUploadTab" class="mode-button" type="button">วางลิงก์จากที่อื่น</button>
-            </div>
-
-            <div id="directUploadArea">
-              <label class="file-drop">
-                เลือกไฟล์วิดีโอ <span>*</span>
-                <input id="videoFile" name="videoFile" type="file" accept="video/*" required />
-                <span id="selectedFileName" class="selected-file-name">ยังไม่ได้เลือกไฟล์</span>
-                <small>รองรับไฟล์วิดีโอจากมือถือ เช่น MP4, MOV ระบบจะอัปโหลดลง Google Drive ของครู</small>
-              </label>
-
-              <details class="apps-script-config" hidden>
-                <summary>ตั้งค่า URL ระบบอัปโหลดของครู</summary>
-                <label>
-                  Google Apps Script Web App URL
-                  <input id="uploadEndpoint" type="url" placeholder="วาง URL ที่ได้จาก Deploy Web App" />
-                </label>
-                <small>ตั้งค่าไว้แล้ว เปลี่ยนเฉพาะเมื่อมีการ Deploy Apps Script ใหม่</small>
-              </details>
-            </div>
-
-            <div id="linkUploadArea" hidden>
-              <label>
-                ลิงก์คลิป <span>*</span>
-                <div class="input-with-icon">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.7 3h6.6L22 15l-3.3 6H5.3L2 15 8.7 3Z"/><path d="M8.7 3 12 9l-6.7 12"/><path d="M15.3 3 8.7 15H22"/></svg>
-                  <input id="driveLink" name="driveLink" type="url" placeholder="วางลิงก์คลิป เช่น Drive, YouTube, Facebook หรือช่องทางอื่น" />
-                </div>
-                <small>ส่งลิงก์จากช่องทางใดก็ได้ แต่ต้องตั้งค่าให้ครูเปิดดูได้</small>
-              </label>
-            </div>
+          <section class="upload-mode link-only-mode" aria-label="ส่งลิงก์คลิป">
+            <label>
+              ลิงก์คลิป <span>*</span>
+              <div class="input-with-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1 0l-2 2A5 5 0 0 0 12 20.1l1.1-1.1"/></svg>
+                <input id="driveLink" name="driveLink" type="url" placeholder="วางลิงก์คลิป เช่น Drive, YouTube, Facebook หรือช่องทางอื่น" required />
+              </div>
+              <small>ส่งลิงก์จากช่องทางใดก็ได้ แต่ต้องตั้งค่าให้ครูเปิดดูได้</small>
+            </label>
           </section>
 
           <label>
