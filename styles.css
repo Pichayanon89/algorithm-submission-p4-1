@@ -387,14 +387,29 @@ small {
 }
 
 .file-drop input::file-selector-button {
-  min-height: 36px;
-  margin-right: 10px;
+  min-height: 42px;
+  margin-right: 12px;
+  padding: 0 14px;
   border: 1px solid #9cc3f0;
   border-radius: var(--radius);
-  background: #ffffff;
-  color: var(--blue-strong);
+  background: #155a93;
+  color: #ffffff;
   cursor: pointer;
   font-weight: 800;
+}
+
+.selected-file-name {
+  display: inline-flex;
+  justify-content: center;
+  min-height: 34px;
+  align-items: center;
+  padding: 6px 10px;
+  border: 1px solid #d7e0ea;
+  border-radius: var(--radius);
+  background: #ffffff;
+  color: #475467;
+  font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .apps-script-config {

@@ -17,6 +17,7 @@ const studentName = document.querySelector("#studentName");
 const driveLink = document.querySelector("#driveLink");
 const note = document.querySelector("#note");
 const videoFile = document.querySelector("#videoFile");
+const selectedFileName = document.querySelector("#selectedFileName");
 const uploadEndpoint = document.querySelector("#uploadEndpoint");
 const directUploadTab = document.querySelector("#directUploadTab");
 const linkUploadTab = document.querySelector("#linkUploadTab");
@@ -40,13 +41,22 @@ const lockDashboardButton = document.querySelector("#lockDashboardButton");
 
 uploadEndpoint.value = localStorage.getItem(ENDPOINT_KEY) || DEFAULT_UPLOAD_ENDPOINT;
 
-directUploadTab.addEventListener("click", () => setUploadMode("direct"));
+directUploadTab.addEventListener("click", () => {
+  const wasDirect = uploadMode === "direct";
+  setUploadMode("direct");
+  if (wasDirect) {
+    videoFile.click();
+  }
+});
 linkUploadTab.addEventListener("click", () => setUploadMode("link"));
 searchInput.addEventListener("input", render);
 statusFilter.addEventListener("change", render);
 refreshButton.addEventListener("click", render);
 exportButton.addEventListener("click", exportCsv);
 uploadEndpoint.addEventListener("change", () => localStorage.setItem(ENDPOINT_KEY, uploadEndpoint.value.trim()));
+videoFile.addEventListener("change", () => {
+  selectedFileName.textContent = videoFile.files[0]?.name || "ยังไม่ได้เลือกไฟล์";
+});
 teacherLoginForm.addEventListener("submit", handleTeacherLogin);
 lockDashboardButton.addEventListener("click", lockTeacherDashboard);
 
@@ -78,6 +88,7 @@ form.addEventListener("submit", async (event) => {
 
     selectedNo = no;
     form.reset();
+    selectedFileName.textContent = "ยังไม่ได้เลือกไฟล์";
     uploadEndpoint.value = localStorage.getItem(ENDPOINT_KEY) || DEFAULT_UPLOAD_ENDPOINT;
     setUploadMode(uploadMode);
     render();
